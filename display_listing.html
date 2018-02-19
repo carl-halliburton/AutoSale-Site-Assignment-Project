@@ -1,0 +1,76 @@
+<html>
+<head>
+	<link href="format.css" rel="stylesheet" type="text/css">
+</head>
+<body>	
+
+<?php
+$connection = mysqli_connect("localhost","root","", "vehiclelisting");
+$listingId = $_GET['id'];
+
+//get listing
+$query = "SELECT * FROM listing WHERE listingid = ".$listingId;
+$result = mysqli_query($connection, $query);
+$listingRow = mysqli_fetch_assoc($result);
+$file = $listingRow["image"];
+$file_path = "http://localhost/Website/Images/";
+
+//get seller information
+$sellerId = $listingRow["sellerid"];
+$query = "SELECT * FROM seller WHERE sellerid = ".$sellerId;
+$result = mysqli_query($connection, $query);
+$sellerRow = mysqli_fetch_assoc($result);
+?>
+
+<h2 id="listingTitle">Vehicle Listing</h2>
+ <table id="listingDisplayForm" border="0">
+  <tr>
+    <td>Make</td>
+    <td><?php echo $listingRow["make"];?></td>
+  </tr>
+  <tr>
+    <td>Model</td>
+    <td><?php echo $listingRow["model"];?></td>
+  </tr>
+    <tr>
+    <td>Type</td>
+    <td><?php echo $listingRow["type"];?></td>
+  </tr>
+    <tr>
+    <td>Year</td>
+    <td><?php echo $listingRow["year"];?></td>
+  </tr>
+    <tr>
+    <td>price</td>
+    <td><?php echo $listingRow["price"];?></td>
+  </tr>
+    <tr>
+    <th colspan="2"><hr></th>
+  </tr>
+    <tr>
+    <td><h3>Contact</h3></td>
+  </tr>
+    <tr>
+    <td>Seller Name</td>
+    <td><?php echo $sellerRow["fname"]." ".$sellerRow["lname"];?></td>
+  </tr>
+    <tr>
+    <td>Email</td>
+    <td><?php echo $sellerRow["email"];?></td>
+  </tr>
+    <tr>
+    <td>Phone</td>
+    <td><?php echo $sellerRow["phone"];?></td>
+  </tr>
+    <tr>
+    <th colspan="2"><hr></th>
+  </tr>
+    <tr>
+    <th colspan="2"><img id="displayImg" src="<?php echo $file_path.$file; ?>" alt="Image not avalieble"/></th>
+  </tr>
+</table> 
+<?php 
+mysqli_close($connection);
+?>
+</body>
+</html>

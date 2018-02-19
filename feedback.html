@@ -1,0 +1,114 @@
+<?php
+session_start();
+
+$fname = "";
+$lname = "";	
+$email = "";
+
+if (isset($_SESSION['id']) && !empty($_SESSION['id'])) {
+	$fname = $_SESSION['user_fn'];
+	$lname = $_SESSION['user_ln'];
+	$email = $_SESSION['user_email'];
+}
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="confirmSession.js"></script> 
+		<link href="format.css" rel="stylesheet" type="text/css">
+		<title>Carl's Auto Sales - Create Account</title>
+		<style type="text/css">
+			li {
+				display: inline;
+				padding: 0.5em;}
+		</style>
+		
+		<script type="text/javascript">
+		
+		function validateForm() {
+			var emailIn = document.getElementById("email");
+			var messageIn = document.getElementById("message");
+			var patt_email = /^[a-zA-Z0-9.?][@][a-zA-Z0-9.?]|.my|.net|.com|.co.nz$/;
+			var valid = true;
+			
+			if (emailIn.value == "") {
+				document.getElementById("emailErrorMsg").innerHTML=" Email required";
+				valid = false;
+			}
+			else if (patt_email.test(emailIn.value) == false) {
+				document.getElementById("emailErrorMsg").innerHTML=" invalid email";
+				valid = false;
+			}
+			else {
+				document.getElementById("emailErrorMsg").innerHTML="";
+				if (valid != false)
+					valid = true;
+			}
+				
+			if (messageIn.value == "") {
+				document.getElementById("msgErrorMsg").innerHTML=" Message required";
+				valid = false;
+			}
+			else {
+				document.getElementById("msgErrorMsg").innerHTML="";
+				if (valid != false)
+					valid = true;
+			}
+			
+			if (valid == false)
+				return false;
+			else
+				return true;
+		}
+		
+		</script>
+		
+	</head>
+	<body onload="setLinks()">
+	<div id="htmlPage">	
+		<div id="login">
+		<?php
+		if (isset($_SESSION['id']) && !empty($_SESSION['id'])) {
+			echo "<li><a href=seller_account.html>Account</a></li>";
+			echo "<li><a href=logout.php>Log Out</a></li>";
+		}
+		else {
+			echo "<li><a href=login.html>Login</a></li>";
+		}?>
+		</div>
+		<div id="header"> 
+			<a href="home.html">
+			<img id="titleImage" src="Logo.png" width="200" height="200" alt="company logo">
+			</a>
+			<h1 id="title">Carl's Auto Sales Ltd</h1>
+			<h3 id="motto">Find it! Buy it! Love it!</h1>
+		</div>
+		<div id="nav">
+			<li><a href="home.html">Home</a></li>
+			<li><a href="advanced_search.html">Advanced Search</a></li>
+			<li>Feedback</li>
+		</div>
+		<div id="content">
+			<form id="msgForm" onSubmit="return validateForm()" action="addFeedback.php" method="GET"> 
+				<h3>Send us Feedback</h3>
+				<p>* Required</p>
+				<label id="fieldTitle">*Name: </label>
+				<input id="name" type="text" name="name" value="<?php echo $fname." ".$lname;?>" size="55ssssss"><br><br>
+
+				<label id="fieldTitle">*Email: </label> 
+				<input id="email" type="text" name="email" value="<?php echo $email;?>" size="55">
+				<spam id="emailErrorMsg"></spam><br><br>
+						
+				<label id="fieldTitle">*Mesasge:</label> 
+				<spam id="msgErrorMsg"></spam><br>
+				<textarea id="message" rows="10" cols="60" name="message"></textarea><br>
+				<input type="Submit" value="Send">
+				<input type="Reset" value="Reset">
+			</form>
+		</div>
+		<div id="footer">
+			<?php include 'footer.php';?>s
+		</div>
+	</div>
+	</body>
+</html>

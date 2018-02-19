@@ -1,0 +1,212 @@
+<?php
+session_start();
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="confirmSession.js"></script> 
+		<link href="format.css" rel="stylesheet" type="text/css">
+		<title>Carl's Auto Sales - Create Account</title>
+		<style type="text/css">
+			li {
+				display: inline;
+				padding: 0.5em;}
+		</style>
+
+		<script type="text/javascript">
+		
+		function validateForm() {
+			var fNameIn = document.getElementById("firstName");
+			var lNameIn = document.getElementById("lastName");
+			var emailIn = document.getElementById("email");
+			var addressIn = document.getElementById("address");
+			var phoneIn = document.getElementById("phone");
+			var unIn = document.getElementById("username");
+			var pwIn = document.getElementById("password");
+			var patt_phone = /^[0][0-9]{8}$|^[0][2][0-9]{8}$/;
+			var patt_email = /^[a-zA-Z0-9.?][@][a-zA-Z0-9.?]|.my|.net|.com|.net.nz|.co.nz$/;
+			var patt_un = /^[a-zA-Z0-9]{6,20}$/;
+			var patt_pw = /^[a-zA-Z0-9]{6,20}$/;
+			var valid = true;
+			
+			if (fNameIn.value == "") {
+				document.getElementById("fNameErrorMsg").innerHTML=" Firstname required";
+				valid = false;
+			}
+			else {
+				document.getElementById("fNameErrorMsg").innerHTML="";
+				if (valid != false)
+					valid = true;
+			}
+			
+			if (lNameIn.value == "") {
+				document.getElementById("lNameErrorMsg").innerHTML=" Lastname required";
+				valid = false;
+			}
+			else {
+				document.getElementById("fNameErrorMsg").innerHTML="";
+				if (valid != false)
+					valid = true;
+			}
+			
+			if (emailIn.value == "") {
+				document.getElementById("emailErrorMsg").innerHTML=" Email required";
+				valid = false;
+			}
+			else if (patt_email.test(emailIn.value) == false) {
+				document.getElementById("emailErrorMsg").innerHTML=" invalid email";
+				valid = false;
+			}
+			else {
+				document.getElementById("emailErrorMsg").innerHTML="";
+				if (valid != false)
+					valid = true;
+			}
+			
+			if (addressIn.value == "") {
+				document.getElementById("addressErrorMsg").innerHTML=" Address required";
+				valid = false;
+			}
+			else {
+				document.getElementById("addressErrorMsg").innerHTML="";
+				if (valid != false)
+					valid = true;
+			}
+			
+			if (phoneIn.value == "") {
+				document.getElementById("phoneErrorMsg").innerHTML=" Phone number required";
+				valid = false;
+			}
+			else if (patt_phone.test(phoneIn.value) == false) {
+				document.getElementById("phoneErrorMsg").innerHTML=" invalid phone 0dddddddd or 02dddddddd";
+				valid = false;
+			}
+			else {
+				document.getElementById("phoneErrorMsg").innerHTML="";
+				if (valid != false)
+					valid = true;
+			}
+			
+			if (unIn.value == "") {
+				document.getElementById("unErrorMsg").innerHTML=" Username required";
+				valid = false;
+			}
+			else if (patt_un.test(unIn.value) == false) {
+				document.getElementById("unErrorMsg").innerHTML=" Must contain 6-20 letters or numbers";
+				valid = false;
+			}
+			else {
+				document.getElementById("unErrorMsg").innerHTML="";
+				if (valid != false)
+					valid = true;
+			}
+
+			if (pwIn.value == "") {
+				document.getElementById("pwErrorMsg").innerHTML=" Password required";
+				valid = false;
+			}
+			else if (patt_pw.test(pwIn.value) == false) {
+				document.getElementById("pwErrorMsg").innerHTML=" Must contain 6-20 letters or numbers";
+				valid = false;
+			}	
+			else {
+				document.getElementById("pwErrorMsg").innerHTML="";
+				var validcur = checkPwEqualsCpw(pwIn);
+				if (validcur == false)//fields are not the same
+					valid = false;
+				else if (valid == true) 
+					valid = true;					
+			}
+					
+			if (valid == false) {
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+
+		function checkPwEqualsCpw(pwIn) {
+			var cpwIn = document.getElementById("cnfrmPassword");
+			if (pwIn.value != cpwIn.value) {
+				document.getElementById("cnfrmPasswordErrorMsg").innerHTML=" Passwords donnot match";
+				return false;
+			}
+			else {
+				document.getElementById("cnfrmPasswordErrorMsg").innerHTML="";
+				return true;
+			}
+		}	
+		</script>
+	</head>
+	<body>
+	<div id="htmlPage">	
+		<div id="login">
+		<?php
+		if (isset($_SESSION['id']) && !empty($_SESSION['id'])) {
+			echo "<li><a href=seller_account.html>Account</a></li>";
+			echo "<li><a href=logout.php>Log Out</a></li>";
+		}
+		else {
+			echo "<li><a href=login.html>Login</a></li>";
+		}?>
+		</div>
+		<div id="header"> 
+			<a href="home.html">
+			<img id="titleImage" src="Logo.png" width="200" height="200" alt="company logo">
+			</a>
+			<h1 id="title">Carl's Auto Sales Ltd</h1>
+			<h3 id="motto">Find it! Buy it! Love it!</h1>
+		</div>
+		<div id="nav">
+			<li><a href="home.html">Home</a></li>
+			<li><a href="advanced_Search.html">Advanced Search</a></li>
+			<li><a href="feedback.html">Feedback</a></li>
+		</div>
+		<div id="content">
+			<form id="createAccForm" action="addSeller.php" method="GET" onSubmit="return validateForm()">
+				<h3>Create Account</h3>
+				<p>* Required</p>
+				
+				<label id="fieldTitle">*First Name: </label>
+				<input id="firstName" name="firstName" type="text" size="30">
+				<spam id="fNameErrorMsg"></spam><br><br>
+				
+				<label id="fieldTitle">*Last Name: </label>
+				<input id="lastName" name="lastName" type="text" size="30">
+				<spam id="lNameErrorMsg"></spam><br><br>
+				
+				<label id="fieldTitle">*Email: </label>
+				<input id="email" name="email" type="text" size="30">
+				<spam id="emailErrorMsg"></spam><br><br>
+				
+				<label id="fieldTitle">*Address: </label>
+				<input id="address" name="address" type="text" size="30">
+				<spam id="addressErrorMsg"></spam><br><br>
+				
+				<label id="fieldTitle">*Phone Number: </label>
+				<input id="phone" name="phone" type="text" size="30">
+				<spam id="phoneErrorMsg"></spam><br><br>				
+					
+				<label id="fieldTitle">*Username: </label>
+				<input id="username" name="username" type="text" size="30">
+				<spam id='unErrorMsg'></spam><br><br>
+				
+				<label id="fieldTitle">*Password: </label>
+				<input id="password" name ="password" type="password" size="30">
+				<spam id="pwErrorMsg"></spam><br><br>
+				
+				<label id="fieldTitle">*Confirm Password </label>
+				<input id="cnfrmPassword" type="password" size="30">
+				<spam id="cnfrmPasswordErrorMsg"></spam><br><br>
+				
+				<input type="Submit" value="Submit">
+				<input type="Reset" value="Reset"><br>
+			</form>
+		</div>
+		<div id="footer">
+			<?php include 'footer.php';?>
+		</div>
+	</div>
+	</body>
+</html>

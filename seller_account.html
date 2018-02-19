@@ -1,0 +1,91 @@
+<?php
+session_start();
+$user = $_SESSION['user_fn'];
+$sellerid = $_SESSION['id'];
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="format.css" rel="stylesheet" type="text/css">
+		<title>Carl's Auto Sales - Seller Account</title>
+		<style type="text/css">
+			li {
+				display: inline;
+				padding: 0.5em;}
+		</style>
+		<script>
+		function submitForm(action)
+		{	
+			var selected = document.getElementById('listingid').value;
+			if (selected != "selectListing") {
+				if (action == "getDisplayId.php") {
+					document.getElementById('form').action = action;
+					document.getElementById('form').target = "_blank";
+					document.getElementById('form').submit();
+				}
+				else {
+					var r = confirm("Are you sure you want to delete listing?");
+					if (r == true) {
+						document.getElementById('form').action = action;
+						document.getElementById('form').submit();
+					}
+				}
+			}
+		}
+		</script>
+	</head>
+	<body>
+	<div id="htmlPage">		
+		<div id="login">
+		<?php
+		if (isset($_SESSION['id']) && !empty($_SESSION['id'])) {
+			echo "<li><a href=seller_account.html>Account</a></li>";
+			echo "<li><a href=logout.php>Log Out</a></li>";
+		}
+		else {
+			echo "<li><a href=login.html>Login</a></li>";
+		}?>
+		</div>
+		<div id="header"> 
+			<a href="home.html">
+			<img id="titleImage" src="Logo.png" width="200" height="200" alt="company logo">
+			</a>
+			<h1 id="title">Carl's Auto Sales Ltd</h1>
+			<h3 id="motto">Find it! Buy it! Love it!</h1>
+		</div>
+		<div id="nav">
+				<li><a href="home.html">Home</a></li>
+				<li><a href="advanced_search.html">Advanced Search</a></li>
+				<li><a href="feedback.html">Feedback</a></li>
+		</div>
+		<div id="content">
+			<h1>Welcome<?php echo " ".$user." you are logged in.";?></h1>
+			<p class="welcome">This page is where you can manage your listings.<br>this includes, updating personal details, adding of cars, updating listings and deleting of listings.
+			</p>
+			<form class="allForms" id="form">
+				<a href="add_car.html">Add Listing</a>
+				<h4>Seller Listing</h4>
+				<?php
+				//get current sellers listings
+				$connection = mysqli_connect("localhost","root","", "vehiclelisting");
+				$query = "SELECT * from listing WHERE sellerid = ".$sellerid;
+				$result = mysqli_query ($connection, $query);
+				echo "<select id=\"listingid\" name=\"listing\">"; 
+				echo "<option size =30 ></option>";
+				echo "<option value=\"selectListing\" disabled selected>-Select Listing-</option>";
+				while($row = mysqli_fetch_assoc($result)) {        
+					echo "<option value='".$row['listingid']."'>".$row['listingid']." ".$row['make']." ".$row['model']." ".$row['year']."</option>"; 
+				}
+				echo "</select>";
+				?>
+				</select><br>
+				<input type="button" onclick="submitForm('getDisplayId.php')" value="Display" /><br>
+				<input type="button" onclick="submitForm('deleteListing.php')" value="Delete" />
+			</form>
+		</div>
+		<div id="footer">
+			<?php include 'footer.php';?>
+		</div>
+	</div>
+	</body>
+</html>

@@ -1,0 +1,97 @@
+<?php
+	session_start();
+	
+	if(!empty($_GET['errorMssg']))
+		$loginMsg = $_GET['errorMssg']; 
+	else
+		$loginMsg = "";
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="format.css" rel="stylesheet" type="text/css">
+		<title>Carl's Auto Sales - login</title>
+		<style type="text/css">
+			li {
+				display: inline;
+				padding: 0.5em;}
+		</style>
+		<script type="text/javascript">
+	
+		function validateForm() {
+			var unIn = document.getElementById("username");
+			var pwIn = document.getElementById("password");
+			var valid = true;
+			
+			if (unIn.value == "") {
+				document.getElementById("unErrorMsg").innerHTML=" Username required";
+				valid = false;
+			}
+			else {
+				document.getElementById("unErrorMsg").innerHTML="";
+				if (valid != false)
+					valid = true;
+			}
+			
+			if (pwIn.value == "") {
+				document.getElementById("pwErrorMsg").innerHTML=" Password required";
+				valid = false;
+			}
+			else {
+				document.getElementById("pwErrorMsg").innerHTML="";
+				if (valid != false)
+					valid = true;
+			}
+
+			if (valid == false)
+				return false;
+				else
+					return true;
+			
+		}
+		</script>
+	</head>
+	<body>
+	<div id="htmlPage">		
+		<div id="login">
+		<?php
+		if (isset($_SESSION['id']) && !empty($_SESSION['id'])) {
+			echo "<li><a href=seller_account.html>Account</a></li>";
+			echo "<li><a href=logout.php>Log Out</a></li>";
+		}
+		else {
+			echo "<li><a href=login.html>Login</a></li>";
+		}?>
+		</div>
+		<div id="header"> 
+			<a href="home.html">
+			<img id="titleImage" src="Logo.png" width="200" height="200" alt="company logo">
+			</a>
+			<h1 id="title">Carl's Auto Sales Ltd</h1>
+			<h3 id="motto">Find it! Buy it! Love it!</h1>
+		</div>
+		<div id="nav">
+			<li><a href="home.html">Home</a></li>
+			<li><a href="advanced_search.html">Advanced Search</a></li>
+			<li><a href="feedback.html">Feedback</a></li>
+		</div>
+		<div id="content">
+			<form class="allForms" onSubmit="return validateForm()" action="login.php" method="POST"> 
+				<h3>Seller Log In</h3>
+				<label id="fieldTitle">Username: </label>
+				<input id="username" name="username" type="text">
+				<spam id="unErrorMsg"></spam><br><br>
+				<label id="fieldTitle">Password: </label>
+				<input id="password" name="password" type="password">
+				<spam id="pwErrorMsg"></spam><br>
+				<spam id="loginFailedMsg"><?php echo $loginMsg ?></spam><br><br>
+				<input type="Submit" name="submit" value="Log in"><br><br>
+				<a href="create_account.html">Create Account</a>
+			</form>
+		</div>
+		<div id="footer">
+			<?php include 'footer.php';?>
+		</div>
+	</div>
+	</body>
+</html>
